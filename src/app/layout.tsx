@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import '@/lib/styles/globals.css';
 import { fontMono, fontSans } from '@/lib/styles/fonts';
-import { ThemeProvider } from '@/lib/styles/components/theme-provider';
+import Layout from '@/lib/components/layout';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -16,14 +16,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${fontSans.variable} ${fontMono.variable}`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
+        <Layout>
           {children}
-        </ThemeProvider>
+        </Layout>
       </body>
     </html>
   );
