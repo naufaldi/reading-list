@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import '@/lib/styles/globals.css';
 import { fontMono, fontSans } from '@/lib/styles/fonts';
 import Layout from '@/lib/components/layout';
+import ReactQueryProvider from '@/providers/reactQueryProvider';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -16,9 +17,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${fontSans.variable} ${fontMono.variable}`}>
-        <Layout>
-          {children}
-        </Layout>
+        <ReactQueryProvider>
+          <Layout>{children}</Layout>
+        </ReactQueryProvider>
       </body>
     </html>
   );

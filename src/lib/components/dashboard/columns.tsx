@@ -1,31 +1,33 @@
-"use client"
+'use client';
 
-import { ColumnDef } from "@tanstack/react-table"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu"
-import { Button } from "../ui/button"
-import { ArrowUpDown, MoreHorizontal } from "lucide-react"
-import { Checkbox } from "../ui/checkbox"
-import { DataTableColumnHeader } from "./data-table-column-header"
+import { ColumnDef } from '@tanstack/react-table';
+
+import { Button } from '../ui/button';
+import { ArrowUpDown, MoreHorizontal } from 'lucide-react';
+import { Checkbox } from '../ui/checkbox';
+import { DataTableColumnHeader } from './data-table-column-header';
+
+import Modal from './Modal';
+import Link from 'next/link';
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 export type Book = {
-  id: string
-  title: string
-  pages: number
-  status: "backlog" | "reading" | "finish" | "pause"
-  author: string
-  url: string
-}
+  id: string;
+  title: string;
+  pages: string;
+  status: string;
+  author: string;
+};
 
 export const columns: ColumnDef<Book>[] = [
   {
-    id: "select",
+    id: 'select',
     header: ({ table }) => (
       <Checkbox
         checked={
           table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
+          (table.getIsSomePageRowsSelected() && 'indeterminate')
         }
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
         aria-label="Select all"
@@ -42,77 +44,63 @@ export const columns: ColumnDef<Book>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "id",
+    accessorKey: 'id',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="ID" />
     ),
-    cell: ({ row }) => <div className="w-[80px]">{row.getValue("id")}</div>,
+    cell: ({ row }) => <div className="w-[80px]">{row.getValue('id')}</div>,
     enableSorting: false,
     enableHiding: false,
   },
   {
-    accessorKey: "title",
+    accessorKey: 'title',
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
           Title
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
   },
   {
-    accessorKey: "author",
+    accessorKey: 'author',
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
           Author
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
   },
   {
-    accessorKey: "pages",
+    accessorKey: 'pages',
     header: () => <div className="text-left">Pages</div>,
   },
   {
-    accessorKey: "status",
+    accessorKey: 'status',
     header: () => <div className="text-left">Status</div>,
   },
   {
-    id: "actions",
+    id: 'actions',
     cell: ({ row }) => {
-      const book = row.original
+      const bookId = row.original.id;
 
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(book.id)}
-            >
-              Copy Book ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View Book Cover</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )
+        <div className="flex gap-2">
+          <Button asChild variant="secondary">
+            <Link href={`/dashboard/edit/${bookId}`}>Edit</Link>
+          </Button>
+          <Modal data={bookId} />
+        </div>
+      );
     },
   },
-
-
-]
+];

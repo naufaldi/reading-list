@@ -1,3 +1,7 @@
-import Dashboard from '@/lib/pages/dashboard';
+import React from 'react';
 
-export default Dashboard;
+const HomePages = () => {
+  return <div>lorem</div>;
+};
+
+export default HomePages;
