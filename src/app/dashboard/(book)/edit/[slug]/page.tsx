@@ -62,6 +62,7 @@ const EditBook = () => {
             <Input
               id="title"
               value={id}
+              disabled
               onChange={(e) => setId(e.target.value)}
               className="col-span-3"
             />

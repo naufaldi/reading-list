@@ -17,11 +17,13 @@ export function Sidebar() {
             Reading List
           </h2>
           <div className="space-y-1">
-            <Link href="/">
-              <Button
-                variant={pathname === '/' ? 'secondary' : 'ghost'}
-                className="w-full justify-start"
-              >
+
+            <Button
+              variant={pathname === '/dashboard' ? 'secondary' : 'ghost'}
+              className="w-full justify-start"
+              asChild
+            >
+              <Link href="/dashboard">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -36,9 +38,10 @@ export function Sidebar() {
                   <polygon points="10 8 16 12 10 16 10 8" />
                 </svg>
                 Home
-              </Button>
-            </Link>
-            <Link href="/geojson">
+              </Link>
+            </Button>
+
+            {/* <Link href="/geojson">
               <Button
                 variant={pathname === '/geojson' ? 'secondary' : 'ghost'}
                 className="w-full justify-start"
@@ -60,7 +63,7 @@ export function Sidebar() {
                 </svg>
                 Create Book
               </Button>
-            </Link>
+            </Link> */}
 
           </div>
         </div>

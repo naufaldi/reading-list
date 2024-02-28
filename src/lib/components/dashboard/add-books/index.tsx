@@ -1,44 +1,42 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useForm, Controller } from 'react-hook-form';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/lib/components/ui/select';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, } from '@/lib/components/ui/dialog';
 import { Button } from '@/lib/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/lib/components/ui/dialog';
 import { Input } from '@/lib/components/ui/input';
 import { Label } from '@/lib/components/ui/label';
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from '@/lib/components/ui/select';
 import { useAddBookMutation } from '@/lib/hooks/useAddBookMutation';
+import { BookListProps } from '@/lib/utils/api-request';
+
+
 
 export function AddBooks() {
-  // State management for book inputs
-  const [id, setId] = useState('');
-  const [title, setTitle] = useState('');
-  const [author, setAuthor] = useState('');
-  const [pages, setPages] = useState('');
-  const [status, setStatus] = useState('');
-
+  const { control, handleSubmit, formState: { errors }, reset } = useForm<BookListProps>();
   const addBookMutation = useAddBookMutation();
 
-  const handleAddBook = async () => {
-    await addBookMutation.mutateAsync({ id, title, author, pages, status });
-    if (!addBookMutation.isError) {
-      // Close dialog on success
-      console.log('show error');
-    }
-    // Handle error case as needed
+  const onSubmit = async (data: BookListProps) => {
+    await addBookMutation.mutateAsync({
+      ...data,
+    },
+      {
+        onSuccess: () => {
+          // Reset form fields to initial state after successful mutation
+          reset({
+            id: '',
+            title: '',
+            author: '',
+            pages: '',
+            status: '',
+          });
+          console.log('Book added successfully');
+        },
+        onError: (error) => {
+          // Handle error case as needed
+          console.error('Error adding book:', error);
+        },
+      }
+    );
+    // Additional success/error handling can be done here
   };
 
   return (
@@ -46,82 +44,92 @@ export function AddBooks() {
       <DialogTrigger asChild>
         <Button variant="outline">Add Books</Button>
       </DialogTrigger>
-      <DialogContent onSubmit={handleAddBook} className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Add Book</DialogTitle>
           <DialogDescription>
             Enter book details and click save.
           </DialogDescription>
         </DialogHeader>
-        <form>
-          <div className="grid gap-4 py-4">
-            {/* Title */}
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="title" className="text-right">
+        <form onSubmit={handleSubmit(onSubmit)}>
+          {/* ID */}
+          <Controller
+            name="id"
+            control={control}
+            rules={{ required: true }}
+            render={({ field }) => (
+              <Label htmlFor="id" className="text-right">
                 ID
+                <Input {...field} className="col-span-3" />
+                {errors.id && <p>ID is required.</p>}
               </Label>
-              <Input
-                id="title"
-                value={id}
-                onChange={(e) => setId(e.target.value)}
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
+            )}
+          />
+          {/* Title */}
+          <Controller
+            name="title"
+            control={control}
+            rules={{ required: 'Title is required' }}
+            render={({ field }) => (
               <Label htmlFor="title" className="text-right">
                 Title
+                <Input {...field} className="col-span-3" />
+                {errors.title && <p>{errors.title.message}</p>}
               </Label>
-              <Input
-                id="title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                className="col-span-3"
-              />
-            </div>
-            {/* Author */}
-            <div className="grid grid-cols-4 items-center gap-4">
+            )}
+          />
+          {/* Author */}
+          <Controller
+            name="author"
+            control={control}
+            rules={{ required: 'Author is required' }}
+            render={({ field }) => (
               <Label htmlFor="author" className="text-right">
                 Author
+                <Input {...field} className="col-span-3" />
+                {errors.author && <p>{errors.author.message}</p>}
               </Label>
-              <Input
-                id="author"
-                value={author}
-                onChange={(e) => setAuthor(e.target.value)}
-                className="col-span-3"
-              />
-            </div>
-            {/* Pages */}
-            <div className="grid grid-cols-4 items-center gap-4">
+            )}
+          />
+          {/* Pages */}
+          <Controller
+            name="pages"
+            control={control}
+            rules={{ required: 'Pages is required' }}
+            render={({ field }) => (
               <Label htmlFor="pages" className="text-right">
                 Pages
+                <Input {...field} type="number" className="col-span-3" />
+                {errors.pages && <p>{errors.pages.message}</p>}
               </Label>
-              <Input
-                id="pages"
-                value={pages}
-                onChange={(e) => setPages(e.target.value)}
-                className="col-span-3"
-              />
-            </div>
-            {/* Status */}
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="status" className="text-right">
-                Status
-              </Label>
-              <Select value={status} onValueChange={setStatus}>
-                <SelectTrigger className="col-span-3">
-                  <SelectValue placeholder="Select a Status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Status</SelectLabel>
-                    <SelectItem value="to do">To Do</SelectItem>
-                    <SelectItem value="progress">Progress</SelectItem>
-                    <SelectItem value="done">Done</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
+            )}
+          />
+          {/* Status */}
+          <Controller
+            name="status"
+            control={control}
+            rules={{ required: 'Status is required' }}
+            render={({ field }) => (
+              <>
+                <Label htmlFor="status" className="text-right">Status</Label>
+                <Select {...field} value={field?.value} defaultValue={field?.value} onValueChange={(val) => field.onChange(val)} >
+                  <SelectTrigger className="col-span-3">
+                    <SelectValue placeholder="Select a Status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Status</SelectLabel>
+                      <SelectItem value="to do">To Do</SelectItem>
+                      <SelectItem value="progress">Progress</SelectItem>
+                      <SelectItem value="done">Done</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+                {errors.status && <p>{errors.status.message}</p>}
+              </>
+            )}
+          />
+
           <DialogFooter>
             <Button type="submit">Save changes</Button>
           </DialogFooter>
