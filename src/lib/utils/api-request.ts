@@ -1,5 +1,3 @@
-import SteinStore from 'stein-js-client';
-
 export type BookListProps = {
   id: string;
   title: string;
@@ -38,7 +36,6 @@ export async function addBook(newBook: BookListProps): Promise<BookListProps> {
 }
 
 const storeUrl = 'https://api.steinhq.com/v1/storages/65dd2cdd4a64236312082f33';
-const store = new SteinStore(storeUrl);
 
 export async function editBook(
   bookId: string,
@@ -59,12 +56,12 @@ export async function editBook(
   return await response.json();
 }
 
-export async function deleteBook(bookId: string): Promise<void> {
-  const response = await fetch(`${getBooksApi}/${bookId}`, {
-    method: 'DELETE',
-  });
+// export async function deleteBook(bookId: string): Promise<void> {
+//   const response = await fetch(`${getBooksApi}/${bookId}`, {
+//     method: 'DELETE',
+//   });
 
-  if (!response.ok) {
-    throw new Error('Failed to delete the book');
-  }
-}
+//   if (!response.ok) {
+//     throw new Error('Failed to delete the book');
+//   }
+// }

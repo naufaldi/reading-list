@@ -1,23 +1,43 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/lib/components/ui/select';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, } from '@/lib/components/ui/dialog';
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from '@/lib/components/ui/select';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/lib/components/ui/dialog';
 import { Button } from '@/lib/components/ui/button';
 import { Input } from '@/lib/components/ui/input';
 import { Label } from '@/lib/components/ui/label';
 import { useAddBookMutation } from '@/lib/hooks/useAddBookMutation';
 import { BookListProps } from '@/lib/utils/api-request';
 
-
-
 export function AddBooks() {
-  const { control, handleSubmit, formState: { errors }, reset } = useForm<BookListProps>();
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<BookListProps>();
   const addBookMutation = useAddBookMutation();
 
   const onSubmit = async (data: BookListProps) => {
-    await addBookMutation.mutateAsync({
-      ...data,
-    },
+    await addBookMutation.mutateAsync(
+      {
+        ...data,
+      },
       {
         onSuccess: () => {
           // Reset form fields to initial state after successful mutation
@@ -36,9 +56,11 @@ export function AddBooks() {
         },
       }
     );
-    // Additional success/error handling can be done here
   };
-
+  // const [author, setAuthor] = useState("");
+  // const [author, setAuthor] = useState("");
+  // const [author, setAuthor] = useState("");
+  // const [author, setAuthor] = useState("");
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -111,8 +133,15 @@ export function AddBooks() {
             rules={{ required: 'Status is required' }}
             render={({ field }) => (
               <>
-                <Label htmlFor="status" className="text-right">Status</Label>
-                <Select {...field} value={field?.value} defaultValue={field?.value} onValueChange={(val) => field.onChange(val)} >
+                <Label htmlFor="status" className="text-right">
+                  Status
+                </Label>
+                <Select
+                  {...field}
+                  value={field?.value}
+                  defaultValue={field?.value}
+                  onValueChange={(val) => field.onChange(val)}
+                >
                   <SelectTrigger className="col-span-3">
                     <SelectValue placeholder="Select a Status" />
                   </SelectTrigger>

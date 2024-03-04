@@ -1,6 +1,8 @@
 import Footer from '@/lib/components/layout/Footer';
 import Header from '@/lib/components/layout/Header';
 import { Sidebar } from '@/lib/components/layout/Sidebar';
+import { createClient } from '@/lib/supabase/server';
+import { redirect } from 'next/navigation';
 import React from 'react';
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {

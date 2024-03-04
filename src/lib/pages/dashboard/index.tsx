@@ -17,6 +17,7 @@ const Dashboard = () => {
     queryKey: ['book-list'],
     queryFn: () => getBookList(),
     staleTime: 1 * 60 * 1000,
+    enabled: true,
   });
   console.log('dataUser', dataUser);
 

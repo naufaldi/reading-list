@@ -1,3 +1,5 @@
+'use client';
+
 import useStore from '@/lib/store/store';
 import { ArrowUpDown, MoreHorizontal } from 'lucide-react';
 import {
@@ -17,10 +19,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '../ui/dialog';
-import React, { useCallback, useEffect, useState } from 'react';
+
 import { Button } from '../ui/button';
+import { useState } from 'react';
 
 const Modal = ({ data }: { data: string }) => {
+  const [test, setTest] = useState();
   return (
     <>
       <Dialog>
