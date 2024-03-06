@@ -1,4 +1,10 @@
-import React, { useState } from 'react';
+'use client';
+
+import React from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+import { z } from 'zod';
+
 import { useForm, Controller } from 'react-hook-form';
 import {
   Select,
@@ -23,31 +29,56 @@ import { Input } from '@/lib/components/ui/input';
 import { Label } from '@/lib/components/ui/label';
 import { useAddBookMutation } from '@/lib/hooks/useAddBookMutation';
 import { BookListProps } from '@/lib/utils/api-request';
+import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/lib/components/ui/form';
+
+const FormSchema = z.object({
+  id: z.string().min(2, {
+    message: 'ID must be at least 2 characters.',
+  }),
+  title: z.string().min(2, {
+    message: 'Title must be at least 2 characters.',
+  }),
+  author: z.string().min(2, {
+    message: 'Author must be at least 2 characters.',
+  }),
+  pages: z.string().min(2, {
+    message: 'Pages must be at least 2 characters.',
+  }),
+  status: z.string().min(2, {
+    message: 'Status must be selected',
+  }),
+});
 
 export function AddBooks() {
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm<BookListProps>();
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
+    defaultValues: {
+      id: '',
+      title: '',
+      author: '',
+      pages: '',
+      status: '',
+    },
+  });
+
   const addBookMutation = useAddBookMutation();
 
-  const onSubmit = async (data: BookListProps) => {
+  const onSubmit = async (values: z.infer<typeof FormSchema>) => {
     await addBookMutation.mutateAsync(
       {
-        ...data,
+        ...values,
       },
       {
         onSuccess: () => {
-          // Reset form fields to initial state after successful mutation
-          reset({
-            id: '',
-            title: '',
-            author: '',
-            pages: '',
-            status: '',
-          });
           console.log('Book added successfully');
         },
         onError: (error) => {
@@ -73,96 +104,104 @@ export function AddBooks() {
             Enter book details and click save.
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          {/* ID */}
-          <Controller
-            name="id"
-            control={control}
-            rules={{ required: true }}
-            render={({ field }) => (
-              <Label htmlFor="id" className="text-right">
-                ID
-                <Input {...field} className="col-span-3" />
-                {errors.id && <p>ID is required.</p>}
-              </Label>
-            )}
-          />
-          {/* Title */}
-          <Controller
-            name="title"
-            control={control}
-            rules={{ required: 'Title is required' }}
-            render={({ field }) => (
-              <Label htmlFor="title" className="text-right">
-                Title
-                <Input {...field} className="col-span-3" />
-                {errors.title && <p>{errors.title.message}</p>}
-              </Label>
-            )}
-          />
-          {/* Author */}
-          <Controller
-            name="author"
-            control={control}
-            rules={{ required: 'Author is required' }}
-            render={({ field }) => (
-              <Label htmlFor="author" className="text-right">
-                Author
-                <Input {...field} className="col-span-3" />
-                {errors.author && <p>{errors.author.message}</p>}
-              </Label>
-            )}
-          />
-          {/* Pages */}
-          <Controller
-            name="pages"
-            control={control}
-            rules={{ required: 'Pages is required' }}
-            render={({ field }) => (
-              <Label htmlFor="pages" className="text-right">
-                Pages
-                <Input {...field} type="number" className="col-span-3" />
-                {errors.pages && <p>{errors.pages.message}</p>}
-              </Label>
-            )}
-          />
-          {/* Status */}
-          <Controller
-            name="status"
-            control={control}
-            rules={{ required: 'Status is required' }}
-            render={({ field }) => (
-              <>
-                <Label htmlFor="status" className="text-right">
-                  Status
-                </Label>
-                <Select
-                  {...field}
-                  value={field?.value}
-                  defaultValue={field?.value}
-                  onValueChange={(val) => field.onChange(val)}
-                >
-                  <SelectTrigger className="col-span-3">
-                    <SelectValue placeholder="Select a Status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel>Status</SelectLabel>
-                      <SelectItem value="to do">To Do</SelectItem>
-                      <SelectItem value="progress">Progress</SelectItem>
-                      <SelectItem value="done">Done</SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-                {errors.status && <p>{errors.status.message}</p>}
-              </>
-            )}
-          />
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="flex flex-col gap-2"
+          >
+            {/* ID */}
+            <FormField
+              control={form.control}
+              name="id"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>ID</FormLabel>
+                  <FormControl>
+                    <Input placeholder="your book id here.." {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {/* Title */}
+            <FormField
+              control={form.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Title</FormLabel>
+                  <FormControl>
+                    <Input placeholder="your book title here.." {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {/* Author */}
+            <FormField
+              control={form.control}
+              name="id"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Author</FormLabel>
+                  <FormControl>
+                    <Input placeholder="your author here.." {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {/* Pages */}
+            <FormField
+              control={form.control}
+              name="id"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Pages</FormLabel>
+                  <FormControl>
+                    <Input placeholder="your book pages here.." {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {/* Status */}
+            <FormField
+              control={form.control}
+              name="id"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Status</FormLabel>
+                  <FormControl>
+                    <Select
+                      {...field}
+                      value={field?.value}
+                      defaultValue={field?.value}
+                      onValueChange={(val) => field.onChange(val)}
+                    >
+                      <SelectTrigger className="col-span-3">
+                        <SelectValue placeholder="Select a Status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Status</SelectLabel>
+                          <SelectItem value="to do">To Do</SelectItem>
+                          <SelectItem value="progress">Progress</SelectItem>
+                          <SelectItem value="done">Done</SelectItem>
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <DialogFooter>
-            <Button type="submit">Save changes</Button>
-          </DialogFooter>
-        </form>
+            <DialogFooter>
+              <Button type="submit">Save changes</Button>
+            </DialogFooter>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );

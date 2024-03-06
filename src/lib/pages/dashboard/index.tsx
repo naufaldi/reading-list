@@ -26,7 +26,7 @@ const Dashboard = () => {
       <div className="flex ml-auto">
         <AddBooks />
       </div>
-      {isLoading || isError ? (
+      {isLoading ? (
         <div>Loading books...</div>
       ) : (
         <DataTable columns={columns} data={dataUser || []} />
