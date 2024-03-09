@@ -14,18 +14,10 @@ export default async function DashboardPage() {
   if (!user) {
     return redirect('/login');
   }
-  // function addComment(comment) {
-  //   // For demonstration purposes to show Error Boundary
-  //   if (comment == null) {
-  //     throw new Error(
-  //       'Example Error: An error thrown to trigger error boundary'
-  //     );
-  //   }
-  // }
 
   return (
     <div>
-      {/* <Button onClick={() => addComment()}> on Error Trigger </Button> */}
+      <h1 className="text-lg">Dashboard</h1>
       <Dashboard />
     </div>
   );

@@ -10,7 +10,6 @@ import { cn } from '@/lib/styles/utils';
 import { Label } from '@/lib/components/ui/label';
 import { Input } from '@/lib/components/ui/input';
 
-import { SubmitButton } from './submit-button';
 import { createClient } from '@/lib/supabase/client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -21,6 +20,7 @@ export default function LoginPage() {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: any) => {
@@ -36,6 +36,7 @@ export default function LoginPage() {
 
     if (error) {
       console.error('error', error.message);
+      setErrorMessage('Invalid login credentials');
       // Optionally, handle error feedback (e.g., a toast notification)
     } else {
       // Redirect the user after successful login
@@ -97,6 +98,7 @@ export default function LoginPage() {
             Sign In
           </SubmitButton> */}
         </form>
+        {errorMessage && <p>{errorMessage}</p>}
       </div>
       <p className="px-8 text-center text-sm text-muted-foreground">
         <Link
