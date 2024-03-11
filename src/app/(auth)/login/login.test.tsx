@@ -58,7 +58,7 @@ describe('LoginPage', () => {
     // Wait for the error message to appear
     await findByText(errorMessage);
 
-    // Assertions
+    // Assertionsa
     expect(mockSignInWithPassword).toHaveBeenCalledWith({
       email: 'test@example.com',
       password: 'wrongpassword',

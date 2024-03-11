@@ -3,7 +3,6 @@ import '@/lib/styles/globals.css';
 import { fontMono, fontSans } from '@/lib/styles/fonts';
 import Layout from '@/lib/components/layout';
 import ReactQueryProvider from '@/providers/reactQueryProvider';
-import { Button } from '@/lib/components/ui/button';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -35,7 +34,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${fontSans.variable} ${fontMono.variable}`}>
-        {/* <button onClick={() => addComment('error')}> on Error Trigger </button> */}
         <ReactQueryProvider>
           <Layout>{children}</Layout>
         </ReactQueryProvider>

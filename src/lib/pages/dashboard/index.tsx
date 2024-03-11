@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { Book, columns } from '@/lib/components/dashboard/columns';
+import React from 'react';
+import { columns } from '@/lib/components/dashboard/columns';
 import { DataTable } from '@/lib/components/dashboard/data-table';
 import { useQuery } from '@tanstack/react-query';
 import { getBookList } from '@/lib/utils/api-request';
