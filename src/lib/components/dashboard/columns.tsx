@@ -15,7 +15,7 @@ import Link from 'next/link';
 export type Book = {
   id: string;
   title: string;
-  pages: string;
+  pages: number;
   status: string;
   author: string;
 };

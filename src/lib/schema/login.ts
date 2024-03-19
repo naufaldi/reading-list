@@ -1,6 +1,8 @@
 import { z } from 'zod';
 
 export const formSchemaLogin = z.object({
-  email: z.string().min(2).max(50),
-  password: z.string().min(2).max(50),
+  email: z.string()
+  .min(1, { message: "This field has to be filled." })
+  .email("This is not a valid email."),
+  password: z.string().min(1, { message: "This field has to be filled." }).max(50),
 });

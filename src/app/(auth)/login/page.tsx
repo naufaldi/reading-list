@@ -40,18 +40,17 @@ export default function LoginPage() {
       password: '',
     },
   });
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+ 
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (values: z.infer<typeof formSchemaLogin>) => {
-    values.preventDefault();
+    
     setLoading(true);
 
     const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
+      email: values.email,
+      password: values.password,
     });
 
     setLoading(false);
@@ -107,12 +106,12 @@ export default function LoginPage() {
             />
             <FormField
               control={form.control}
-              name="email"
+              name="password"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input placeholder="asd123" {...field} />
+                    <Input placeholder="asd123" type='password' {...field} />
                   </FormControl>
 
                   <FormMessage />
@@ -125,7 +124,6 @@ export default function LoginPage() {
             </Button>
           </form>
         </Form>
-
         {errorMessage && <p className="text-red-500 my-4">{errorMessage}</p>}
       </div>
       <p className="px-8 text-center text-sm text-muted-foreground my-4">
