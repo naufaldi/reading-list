@@ -22,7 +22,7 @@ const EditBook = () => {
   const [id, setId] = useState('');
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
-  const [pages, setPages] = useState('');
+  const [pages, setPages] = useState();
   const [status, setStatus] = useState('');
   const router = usePathname();
   const bookId = router.split('/').pop() || '';
