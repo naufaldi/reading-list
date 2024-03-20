@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { z } from 'zod';
@@ -28,76 +28,95 @@ import { Button } from '@/lib/components/ui/button';
 import { Input } from '@/lib/components/ui/input';
 import { Label } from '@/lib/components/ui/label';
 import { useAddBookMutation } from '@/lib/hooks/useAddBookMutation';
-import { BookListProps } from '@/lib/utils/api-request';
-import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
+
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from '@/lib/components/ui/form';
+import { generateId } from '@/lib/utils/generateID';
+import { formSchemaAddBook } from '@/lib/schema/book';
+import { useToast } from '@/lib/components/ui/use-toast';
+import { motion } from 'framer-motion';
+import { FadeInTop } from '@/lib/animation/fadeIn';
 
-const FormSchema = z.object({
-  id: z.string().min(2, {
-    message: 'ID must be at least 2 characters.',
-  }),
-  title: z.string().min(2, {
-    message: 'Title must be at least 2 characters.',
-  }),
-  author: z.string().min(2, {
-    message: 'Author must be at least 2 characters.',
-  }),
-  pages: z.string().min(2, {
-    message: 'Pages must be at least 2 characters.',
-  }),
-  status: z.string().min(2, {
-    message: 'Status must be selected',
-  }),
-});
+
 
 export function AddBooks() {
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
-    defaultValues: {
-      id: '',
-      title: '',
-      author: '',
-      pages: '',
-      status: '',
-    },
-  });
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
+  const { toast } = useToast()
+  const [defaultValues] = useState({
+    id: generateId(),
+    title: '',
+    author: '',
+    pages: 0,
+    status: '',
+  });
+  const form = useForm<z.infer<typeof formSchemaAddBook>>({
+    resolver: zodResolver(formSchemaAddBook),
+    defaultValues
+  });
+  const resetForm = () => {
+    form.reset({
+      ...defaultValues,
+      id: generateId()
+    });
+  };
+  const dialogVariants = {
+    hidden: { opacity: 0, scale: 0.75 },
+    visible: { opacity: 1, scale: 1, transition: { duration: 0.5 } },
+    exit: { opacity: 0, scale: 0.75, transition: { duration: 0.3 } }
+  };
   const addBookMutation = useAddBookMutation();
 
-  const onSubmit = async (values: z.infer<typeof FormSchema>) => {
+  const onSubmit = async (values: z.infer<typeof formSchemaAddBook>) => {
     await addBookMutation.mutateAsync(
       {
         ...values,
       },
       {
         onSuccess: () => {
-          console.log('Book added successfully');
+          form.reset();
+          toast({
+            title: "Success Add",
+            description: "Book Added successfully",
+            variant: "success",
+          })
         },
         onError: (error) => {
-          // Handle error case as needed
-          console.error('Error adding book:', error);
+          toast({
+            title: "Fail Add",
+            description: `Book Failed to Add, ${error.message}`,
+            variant: "destructive",          
+          })
         },
       }
     );
   };
-  // const [author, setAuthor] = useState("");
-  // const [author, setAuthor] = useState("");
-  // const [author, setAuthor] = useState("");
-  // const [author, setAuthor] = useState("");
+  
   return (
-    <Dialog>
+    <Dialog onOpenChange={resetForm}>
       <DialogTrigger asChild>
-        <Button variant="outline">Add Books</Button>
+        <Button variant="outline" >Add Books</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
+      <motion.div
+          initial={{ y: -20, scaleX: 0.8 }}
+          animate={{ y: 0, scaleX: 1 }}
+          className="dialog-body"
+        >
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{
+              delay: 0.15
+            }}
+          >
+              
         <DialogHeader>
           <DialogTitle>Add Book</DialogTitle>
           <DialogDescription>
@@ -105,9 +124,10 @@ export function AddBooks() {
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form
+          <motion.form
+          variants={FadeInTop}
             onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col gap-2"
+            className="grid grid-cols-2 gap-4"
           >
             {/* ID */}
             <FormField
@@ -117,7 +137,7 @@ export function AddBooks() {
                 <FormItem>
                   <FormLabel>ID</FormLabel>
                   <FormControl>
-                    <Input placeholder="your book id here.." {...field} />
+                    <Input placeholder="your book id here.."   disabled {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -140,7 +160,7 @@ export function AddBooks() {
             {/* Author */}
             <FormField
               control={form.control}
-              name="id"
+              name="author"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Author</FormLabel>
@@ -154,12 +174,12 @@ export function AddBooks() {
             {/* Pages */}
             <FormField
               control={form.control}
-              name="id"
+              name="pages"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Pages</FormLabel>
                   <FormControl>
-                    <Input placeholder="your book pages here.." {...field} />
+                    <Input placeholder="your book pages here.." type='number' {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -168,7 +188,7 @@ export function AddBooks() {
             {/* Status */}
             <FormField
               control={form.control}
-              name="id"
+              name="status"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Status</FormLabel>
@@ -200,8 +220,10 @@ export function AddBooks() {
             <DialogFooter>
               <Button type="submit">Save changes</Button>
             </DialogFooter>
-          </form>
+          </motion.form>
         </Form>
+        </motion.div>
+            </motion.div>
       </DialogContent>
     </Dialog>
   );

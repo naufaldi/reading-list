@@ -13,40 +13,62 @@ import { Input } from '@/lib/components/ui/input';
 import { createClient } from '@/lib/supabase/client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/lib/components/ui/form';
+import { useForm } from 'react-hook-form';
+import { formSchemaLogin } from '@/lib/schema/login';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 
 export default function LoginPage() {
+  //supabase for client side component
   const supabase = createClient();
   const router = useRouter();
-
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  /*
+   * Reference : https://ui.shadcn.com/docs/components/form#example
+   */
+  const form = useForm<z.infer<typeof formSchemaLogin>>({
+    resolver: zodResolver(formSchemaLogin),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
+ 
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
+  const handleSubmit = async (values: z.infer<typeof formSchemaLogin>) => {
+    
     setLoading(true);
 
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
+    const { error } = await supabase.auth.signInWithPassword({
+      email: values.email,
+      password: values.password,
     });
 
     setLoading(false);
 
     if (error) {
-      console.error('error', error.message);
-      setErrorMessage('Invalid login credentials');
-      // Optionally, handle error feedback (e.g., a toast notification)
+      // you can use toast from shadcn too
+      setErrorMessage(error.message);
     } else {
       // Redirect the user after successful login
       router.push('/dashboard');
-      // console.log('data login', data);
     }
   };
 
   return (
-    <div className="container flex h-screen w-screen flex-col items-center justify-center">
+    <section
+      id="login"
+      className="container flex h-screen w-screen flex-col items-center justify-center"
+    >
       <Link
         href="/"
         className={cn(
@@ -60,54 +82,58 @@ export default function LoginPage() {
         </>
       </Link>
       <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
-        <form
-          onSubmit={handleSubmit}
-          className="flex flex-col space-y-2 text-center"
-        >
-          <Icons.logo className="mx-auto h-6 w-6" />
-          <h1 className="text-2xl font-semibold tracking-tight">
-            Welcome back
-          </h1>
-          <Label className="sr-only" htmlFor="email">
-            Email
-          </Label>
-          <Input
-            id="email"
-            placeholder="name@example.com"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-
-          <Label className="sr-only" htmlFor="password">
-            Password
-          </Label>
-          <Input
-            id="password"
-            placeholder="Password here"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <Button type="submit"> Sign In</Button>
-          {/* <SubmitButton
-            formAction={signIn}
-            className="bg-green-700 rounded-md px-4 py-2 text-foreground mb-2"
-            pendingText="Signing In..."
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="flex flex-col space-y-4 text-left"
           >
-            Sign In
-          </SubmitButton> */}
-        </form>
-        {errorMessage && <p>{errorMessage}</p>}
+            <h1 className="text-2xl font-semibold tracking-tight text-center">
+              Welcome back
+            </h1>
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input placeholder="naufaldi@gmail.com" {...field} />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input placeholder="asd123" type='password' {...field} />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button type="submit" disabled={loading}>
+              {' '}
+              Sign In
+            </Button>
+          </form>
+        </Form>
+        {errorMessage && <p className="text-red-500 my-4">{errorMessage}</p>}
       </div>
-      <p className="px-8 text-center text-sm text-muted-foreground">
+      <p className="px-8 text-center text-sm text-muted-foreground my-4">
         <Link
           href="/register"
-          className="hover:text-brand underline underline-offset-4"
+          className="hover:text-brand underline underline-offset-4 "
         >
           Don&apos;t have an account? Sign Up
         </Link>
       </p>
-    </div>
+    </section>
   );
 }

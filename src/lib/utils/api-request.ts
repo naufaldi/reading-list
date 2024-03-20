@@ -2,7 +2,7 @@ export type BookListProps = {
   id: string;
   title: string;
   author: string;
-  pages: string;
+  pages: number;
   status: string;
 };
 

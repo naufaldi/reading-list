@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { Book, columns } from '@/lib/components/dashboard/columns';
+import React from 'react';
+import { columns } from '@/lib/components/dashboard/columns';
 import { DataTable } from '@/lib/components/dashboard/data-table';
 import { useQuery } from '@tanstack/react-query';
 import { getBookList } from '@/lib/utils/api-request';
@@ -13,6 +13,7 @@ const Dashboard = () => {
     data: dataUser,
     isLoading,
     isError,
+    
   } = useQuery({
     queryKey: ['book-list'],
     queryFn: () => getBookList(),
@@ -26,10 +27,11 @@ const Dashboard = () => {
       <div className="flex ml-auto">
         <AddBooks />
       </div>
+     
       {isLoading ? (
         <div>Loading books...</div>
       ) : (
-        <DataTable columns={columns} data={dataUser || []} />
+         <DataTable columns={columns} data={dataUser || [] } />
       )}
       {isError ? <div>Error fetching books</div> : null}
     </div>
