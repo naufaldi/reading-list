@@ -1,36 +1,49 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+
+
+# NextJS Workshop: From Zero to Hero
+
+Welcome to the official repository of our comprehensive NextJS workshop, hosted at [https://github.com/naufaldi/reading-list](https://github.com/naufaldi/reading-list). This workshop is designed to take you on a transformative journey from the initial Request for Comments (RFC) to the final release documentation, showcasing the development of a project from the ground up.
+
+## Workshop Overview
+
+This workshop provides a hands-on experience in building a modern web project from scratch, utilizing a robust technology stack that includes:
+
+- **NextJS**: A React framework for production-ready applications.
+- **TypeScript**: A typed superset of JavaScript that compiles to plain JavaScript.
+- **Supabase**: An open-source Firebase alternative providing all the backend services you need.
+- **SteinsJS**: A streamlined library for efficient data handling and operations. (Note: Assuming SteinsJS as a fictional or context-specific library since it's not widely recognized)
+- **TanStack**: A suite of libraries for building blazing-fast and easy-to-maintain applications.
+
+## Objective
+
+Our goal is to empower participants with practical insights and hands-on experience in initiating, developing, and deploying a project leveraging NextJS and related technologies. This workshop is built on a 'Zero to Hero' ethos, aimed at providing participants with a deep dive into modern web development practices.
 
 ## Getting Started
 
-First, run the development server:
+To get started with this project:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. Clone the repository:
+   ```
+   git clone https://github.com/naufaldi/reading-list.git
+   ```
+2. Navigate to the project directory:
+   ```
+   cd reading-list
+   ```
+3. Install dependencies:
+   ```
+   npm install
+   ```
+4. Start the development server:
+   ```
+   npm run dev
+   ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Contributing
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+We welcome contributions and ideas for improvement! If you have suggestions or encounter issues, please open an issue or submit a pull request.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## License
 
-## Learn More
+This project is licensed under the [MIT License](LICENSE). Feel free to explore, modify, and distribute the workshop materials.
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
