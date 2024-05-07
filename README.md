@@ -1,6 +1,6 @@
 
 
-# NextJS Workshop: From Zero to Hero
+# NextJS Workshop: From Zero to Hero Dashboard
 
 Welcome to the official repository of our comprehensive NextJS workshop, hosted at [https://github.com/naufaldi/reading-list](https://github.com/naufaldi/reading-list). This workshop is designed to take you on a transformative journey from the initial Request for Comments (RFC) to the final release documentation, showcasing the development of a project from the ground up.
 
