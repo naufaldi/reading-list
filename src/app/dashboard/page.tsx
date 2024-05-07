@@ -17,7 +17,7 @@ export default async function DashboardPage() {
 
   return (
     <div>
-      <h1 className="text-lg">Dashboard</h1>
+      <h1 className="text-lg">Dashboard Reading List</h1>
       <Dashboard />
     </div>
   );
